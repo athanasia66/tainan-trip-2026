@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>台南 2D1N 慢活手帳</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Noto+Sans+TC:wght@400;700&family=Zeyada&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --paper-bg: #fdfbf7;
+            --ink-color: #2c3e50;
+            --accent-blue: #a2d2ff;
+            --accent-pink: #ffafcc;
+            --accent-yellow: #fae588;
+            --accent-green: #bcebc9;
+            --card-shadow: 2px 4px 10px rgba(0,0,0,0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #e8e4d9;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZThlNGQ5Ii8+CjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiNkM2QwYzUiLz4KPC9zdmc+');
+            font-family: 'Noto Sans TC', sans-serif;
+            color: var(--ink-color);
+            margin: 0;
+            padding: 0;
+            padding-bottom: 80px; /* 底部留白給導覽列 */
+        }
+
+        /* 標題區 */
+        header {
+            background: var(--paper-bg);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px dashed #ccc;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        h1 {
+            font-family: 'Zeyada', cursive;
+            font-size: 2rem;
+            margin: 0;
+            color: #d64045;
+            transform: rotate(-2deg);
+        }
+
+        h2 {
+            font-size: 1rem;
+            color: #666;
+            margin: 5px 0 0 0;
+        }
+
+        /* 導覽切換 */
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: 2px solid var(--ink-color);
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            padding: 8px 20px;
+            font-family: 'Zeyada', cursive;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--ink-color);
+            color: #fff;
+            transform: rotate(-1deg) scale(1.05);
+        }
+
+        /* 天氣卡片 */
+        .weather-widget {
+            background: var(--accent-blue);
+            margin: 15px;
+            padding: 15px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 2px solid var(--ink-color);
+            box-shadow: 4px 4px 0 var(--ink-color);
+        }
+
+        .weather-info {
+            font-weight: bold;
+        }
+
+        /* 行程卡片容器 */
+        .timeline {
+            padding: 10px 15px;
+            display: none; /* 預設隱藏，由 JS 控制 */
+        }
+
+        .timeline.active {
+            display: block;
+        }
+
+        /* 單張卡片設計 */
+        .card {
+            background: var(--paper-bg);
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            position: relative;
+            border: 2px solid var(--ink-color);
+            box-shadow: 5px 5px 0 rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .card::before {
+            /* 模擬膠帶效果 */
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 25px;
+            background-color: rgba(255, 255, 255, 0.6);
+            border-left: 1px dashed rgba(0,0,0,0.1);
+            border-right: 1px dashed rgba(0,0,0,0.1);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            z-index: 1;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .time-badge {
+            background: var(--ink-color);
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-family: 'Caveat', cursive;
+            font-size: 1.2rem;
+            transform: rotate(-2deg);
+        }
+
+        .nav-btn {
+            background: #4ecdc4;
+            color: var(--ink-color);
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            border: 2px solid var(--ink-color);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 2px 2px 0 var(--ink-color);
+        }
+
+        .nav-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: none;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-icon {
+            font-size: 1.2rem;
+        }
+
+        .card-desc {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        /* 導遊小貼士區域 */
+        .guide-note {
+            margin-top: 12px;
+            padding: 10px;
+            background: #fff9db;
+            border-radius: 8px;
+            border: 1px dashed #d4c685;
+            font-size: 0.9rem;
+        }
+
+        .guide-title {
+            font-family: 'Caveat', cursive;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #d68c45;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        /* 標籤樣式 */
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .tag-eat { background: var(--accent-pink); }
+        .tag-buy { background: var(--accent-blue); }
+        .tag-tip { background: var(--accent-yellow); }
+        .tag-photo { background: var(--accent-green); }
+
+        /* 底部導航 */
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--ink-color);
+            color: #fff;
+            padding: 10px 25px;
+            border-radius: 30px;
+            display: flex;
+            gap: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 999;
+        }
+        
+        .bottom-icon {
+            text-align: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Tainan Trip 🚂</h1>
+    <h2>6人小隊・慢活之旅</h2>
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchDay(1)">Day 1 (2/27)</button>
+        <button class="tab-btn" onclick="switchDay(2)">Day 2 (2/28)</button>
+    </div>
+</header>
+
+<div id="day1" class="timeline active">
+    
+    <div class="weather-widget">
+        <div>
+            <div style="font-size: 0.9rem;">📍 台南中西區</div>
+            <div style="font-size: 1.5rem; font-family: 'Caveat';">Sunny ☀️</div>
+        </div>
+        <div class="weather-info">
+            20°C - 26°C<br>
+            <span style="font-size: 0.8rem; font-weight: normal;">早晚微涼，適合薄外套</span>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <span class="time-badge">11:00</span>
+            <a href="https://www.google.com/maps/search/?api=1&query=台南火車站" target="_blank" class="nav-btn">📍GO 導航</a>
+        </div>
+        <div class="card-title"><span class="card-icon">🚂</span> 集合：台南火車站</div>
+        <div class="card-desc">大家集合囉！確認人數到齊。</div>
+        <div class="guide-note">
+            <span class="guide-title">🦊 導遊筆記：</span>
+            <span class="tag tag-tip">交通</span> 前站出口集合最方便。若有租機車需求，後站選擇較多。<br>
+            <span class="tag tag-eat">午餐建議</span> 附近「北門路」有許多學生美食，或前往「民權路」的傳統小吃。
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <span class="time-badge">13:00</span>
+            <a href="https://www.google.com/maps/search/?api=1&query=Ciao+潮文旅" target="_blank" class="nav-btn">📍GO 導航</a>
+        </div>
+        <div class="card-title"><span class="card-icon">🏨</span> Ciao 潮文旅 (寄行李)</div>
+        <div class="card-desc">先將行李卸下，一身輕便開始下午的慢活行程。</div>
+        <div class="guide-note">
+            <span class="guide-title">🦊 導遊筆記：</span>
+            <span class="tag tag-tip">亮點</span> 飯店頂樓有無邊際泳池視野，Check-in時可以先上去看看風景。
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <span class="time-badge">14:00</span>
+            <a href="https://www.google.com/maps/search/?api=1&query=台南市美術館2館" target="_blank" class="nav-btn">📍GO 導航</a>
+        </div>
+        <div class="card-title"><span class="card-icon">🎨</span> 中西區藝文散策</div>
+        <div class="card-desc">步行即可抵達。台南市美術館 2 館、司法博物館（貓道）、孔廟商圈。</div>
+        <div class="guide-note">
+            <span class="guide-title">🦊 導遊筆記：</span>
+            <span class="tag tag-photo">必拍</span> 南美館2館的碎形屋頂，陽光灑落的光影非常美。<br>
+            <span class="tag tag-eat">下午茶</span> 累了可去「窄門咖啡」(挑戰38公分入口) 或「寮國咖啡」喝杯拿鐵。
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <span class="time-badge">18:00</span>
+            <a href="https://www.google.com/maps/search/?api=1&query=台南神農街" target="_blank" class="nav-btn">📍GO 導航</a>
+        </div>
+        <div class="card-title"><span class="card-icon">🏮</span> 神農街漫遊</div>
+        <div class="card-desc">感受老屋與燈籠交織的氛圍，文創小店非常好逛。</div>
+        <div class="guide-note">
+            <span class="guide-title">🦊 導遊筆記：</span>
+            <span class="tag tag-photo">拍照</span> 建議穿淺色衣服，在燈籠下拍照最好看。<br>
+            <span class="tag tag-buy">必買</span> 手工帆布包、復古雜貨。<br>
+            <span class="tag tag-eat">晚餐</span> 附近的「海安路藝術街」有許多露天燒烤與酒吧。
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <span class="time-badge">20:00</span>
+            <a href="https://www.google.com/maps/search/?api=1&query=大東夜市" target="_blank" class="nav-btn">📍GO 導航</a>
+        </div>
+        <div class="card-title"><span class="card-icon">🍗</span> 大東夜市</div>
+        <div class="card-desc">搭計程車前往。買宵夜、酒水回飯店桌遊之夜！</div>
+        <div class="guide-note">
+            <span class="guide-title">🦊 導遊筆記：</span>
+            <span class="tag tag-eat">必吃</span> 原住民石板烤肉、二師兄滷味、地瓜球。<br>
+            <span class="tag tag-tip">注意</span> 要確認當天是大東夜市有沒有營業。
+        </div>
+    </div>
+</div>
+
+<div id="day2" class="timeline">
+    
+    <div class="weather-widget" style="background: var(--accent-pink);">
+        <div>
+            <div style="font-size: 0.9rem;">📍 台南仁德區</div>
+            <div style="font-size: 1.5rem; font-family: 'Caveat';">Clear 🌤️</div>
+        </div>
+        <div class="weather-info">
+            21°C - 27°C<br>
+            <span style="font-size: 0.8rem; font-weight: normal;">戶外活動注意防曬</span>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <span class="time-badge">10:00</span>
+            <a href="https://www.google.com/maps/search/?api=1&query=十鼓文創園區" target="_blank" class="nav-btn">📍GO 導航</a>
+        </div>
+        <div class="card-title"><span class="card-icon">🚕</span> 出發：十鼓文創園區</div>
+        <div class="card-desc">退房，直接搭計程車前往（車程約 20 分鐘）。行李可寄放在園區售票處或遊客中心。</div>
+        <div class="guide-note">
+            <span class="guide-title">🦊 導遊筆記：</span>
+            <span class="tag tag-tip">費用</span> 門票約 $460 (建議線上先買可能較便宜)。
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <span class="time-badge">11:00</span>
+        </div>
+        <div class="card-title"><span class="card-icon">🥁</span> 必看：夢糖劇場擊鼓秀</div>
+        <div class="card-desc">百年糖廠內的震撼表演，絕對不能錯過！</div>
+        <div class="guide-note">
+            <span class="guide-title">🦊 導遊筆記：</span>
+            <span class="tag tag-tip">攻略</span> 建議提前 15 分鐘入場佔好位置。表演非常震撼，心臟要準備好！
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <span class="time-badge">12:00</span>
+        </div>
+        <div class="card-title"><span class="card-icon">🍱</span> 園區午餐</div>
+        <div class="card-desc">修護棚餐廳或蜜橋咖啡館。</div>
+        <div class="guide-note">
+            <span class="guide-title">🦊 導遊筆記：</span>
+            <span class="tag tag-eat">推薦</span> 鼓找蛋(茶葉蛋)、甘蔗冰棒。餐廳走工業風，氣氛很好。
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <span class="time-badge">13:00</span>
+        </div>
+        <div class="card-title"><span class="card-icon">🎢</span> 極限挑戰 & 網美照</div>
+        <div class="card-desc">煙囪滑梯、飛天宅急便、天堂路。</div>
+        <div class="guide-note">
+            <span class="guide-title">🦊 導遊筆記：</span>
+            <span class="tag tag-tip">必玩</span> 5層樓高的煙囪滑梯 (速度很快!)。<br>
+            <span class="tag tag-photo">必拍</span> 「天堂路」步道，背景是奇美博物館，黃昏或藍天時拍最美。<br>
+            <span class="tag tag-tip">哈利波特風</span> 魔法工廠場景也是必拍點。
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <span class="time-badge">15:00</span>
+            <a href="https://www.google.com/maps/search/?api=1&query=台南高鐵站" target="_blank" class="nav-btn">📍GO 高鐵</a>
+        </div>
+        <div class="card-title"><span class="card-icon">👋</span> 賦歸：前往車站</div>
+        <div class="card-desc">領取行李，搭計程車前往高鐵站（約15分）或火車站。</div>
+        <div class="guide-note">
+            <span class="guide-title">🦊 導遊筆記：</span>
+            <span class="tag tag-buy">伴手禮</span> 如果還沒買，高鐵站內有 7-11 或一些伴手禮櫃位可以最後衝刺。
+        </div>
+    </div>
+</div>
+
+<div style="height: 50px;"></div>
+
+<script>
+    function switchDay(day) {
+        // 隱藏所有時間軸
+        document.querySelectorAll('.timeline').forEach(el => el.classList.remove('active'));
+        // 移除按鈕活性
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        
+        // 顯示選定日期
+        document.getElementById('day' + day).classList.add('active');
+        // 按鈕變色
+        document.querySelectorAll('.tab-btn')[day-1].classList.add('active');
+        
+        // 滾動到頂部
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>
