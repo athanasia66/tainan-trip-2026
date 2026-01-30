@@ -3,92 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>台南漫活・古都二日遊 | 2026</title>
+    <title>228台南走走 | 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Noto Sans TC', sans-serif; background-color: #FAFAF9; color: #44403C; }
-        .chart-container { position: relative; width: 100%; max-width: 500px; margin: 0 auto; height: 300px; max-height: 400px; }
-        .timeline-line { position: absolute; left: 1.25rem; top: 0; bottom: 0; width: 2px; background-color: #E7E5E4; z-index: 0; }
-        .active-tab { border-bottom: 3px solid #9A3412; color: #9A3412; font-weight: 700; }
-        .inactive-tab { color: #78716C; }
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        @media (min-width: 768px) { .chart-container { height: 350px; } }
+       .chart-container { position: relative; width: 100%; max-width: 500px; margin: 0 auto; height: 300px; max-height: 400px; }
+       .timeline-line { position: absolute; left: 1.25rem; top: 0; bottom: 0; width: 2px; background-color: #E7E5E4; z-index: 0; }
+       .active-tab { border-bottom: 3px solid #9A3412; color: #9A3412; font-weight: 700; }
+       .inactive-tab { color: #78716C; }
+       .hide-scrollbar::-webkit-scrollbar { display: none; }
+       .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        @media (min-width: 768px) {.chart-container { height: 350px; } }
     </style>
-    <!-- Chosen Palette: Old Tainan Bricks (Warm Neutrals & Brick Red) -->
-    <!-- Application Structure Plan: Mobile-first SPA with a sticky top navigation. 
-         1. Dashboard: High-level summary & visual budget breakdown using Chart.js.
-         2. Itinerary: The core feature, a vertical timeline toggling between Day 1/2.
-         3. Food: A filterable card grid (Seafood/Cafe/Snacks).
-         4. Ten Drum: Dedicated section for Day 2 strategy.
-         5. Logistics: Transport & Accommodation details. 
-         Rationale: Users on the go need quick access to "Where next?" (Itinerary) and "How to get there?" (Maps links). -->
-    <!-- Visualization & Content Choices: 
-         - Budget Chart (Pie): To manage expectations for shared costs.
-         - Activity Balance (Bar): To visualize the "Slow Living" vs "Active" pace.
-         - Timeline: Vertical layout best for mobile chronological flow. 
-         - Google Maps Links: Direct integration for usability.
-         - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 </head>
 <body class="antialiased pb-20">
 
-    <!-- Navigation -->
     <nav class="sticky top-0 z-50 bg-[#FAFAF9]/95 backdrop-blur shadow-sm border-b border-stone-200">
         <div class="max-w-4xl mx-auto px-4">
             <div class="flex justify-between items-center h-16">
-                <div class="font-bold text-xl text-orange-900 tracking-wider">TAINAN 2026</div>
-                <div class="hidden md:flex space-x-6 text-sm font-medium">
+                <div class="font-bold text-xl text-orange-900 tracking-wider">228 台南走走</div>
+                <div class="hidden md:flex space-x-4 text-sm font-medium">
                     <button onclick="switchView('overview')" class="hover:text-orange-700 transition">總覽</button>
                     <button onclick="switchView('itinerary')" class="hover:text-orange-700 transition">每日行程</button>
                     <button onclick="switchView('food')" class="hover:text-orange-700 transition">美食地圖</button>
+                    <button onclick="switchView('sightseeing')" class="hover:text-orange-700 transition">景點地圖</button>
                     <button onclick="switchView('tendrum')" class="hover:text-orange-700 transition">十鼓攻略</button>
                     <button onclick="switchView('logistics')" class="hover:text-orange-700 transition">交通住宿</button>
                 </div>
                 <button onclick="toggleMobileMenu()" class="md:hidden text-2xl text-stone-600">☰</button>
             </div>
         </div>
-        <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-stone-100 absolute w-full shadow-lg">
             <div class="flex flex-col p-4 space-y-3 font-medium text-stone-600">
                 <button onclick="switchView('overview')" class="text-left py-2 border-b border-stone-50">行程總覽</button>
                 <button onclick="switchView('itinerary')" class="text-left py-2 border-b border-stone-50">每日行程</button>
                 <button onclick="switchView('food')" class="text-left py-2 border-b border-stone-50">美食地圖</button>
+                <button onclick="switchView('sightseeing')" class="text-left py-2 border-b border-stone-50">景點地圖</button>
                 <button onclick="switchView('tendrum')" class="text-left py-2 border-b border-stone-50">十鼓攻略</button>
                 <button onclick="switchView('logistics')" class="text-left py-2">交通住宿</button>
             </div>
         </div>
     </nav>
 
-    <!-- Content Container -->
     <main id="app-content" class="max-w-3xl mx-auto px-4 pt-6 space-y-8">
         
-        <!-- SECTION: OVERVIEW -->
         <section id="overview" class="view-section animate-fade-in">
             <div class="text-center mb-8">
                 <span class="inline-block px-3 py-1 bg-orange-100 text-orange-800 text-xs font-bold rounded-full mb-2">慢活之旅</span>
-                <h1 class="text-3xl font-bold text-stone-800 mb-2">台南古都・慢活二日遊</h1>
-                <p class="text-stone-500">2026.02.27 (五) — 02.28 (六) | 6 人成行</p>
+                <h1 class="text-3xl font-bold text-stone-800 mb-2">228 台南走走</h1>
+                <p class="text-stone-500">2026.02.27 (五) ~ 02.28 (六) | 6 人行</p>
+            </div>
+
+            <div class="bg-gradient-to-r from-emerald-50 to-teal-50 p-6 rounded-2xl shadow-sm border border-emerald-100 mb-8 relative overflow-hidden">
+                <div class="relative z-10">
+                    <h2 class="text-lg font-bold text-emerald-800 mb-2 flex items-center">
+                        <span class="text-xl mr-2">💰</span> 記帳小幫手
+                    </h2>
+                    <p class="text-sm text-emerald-700 mb-4 leading-relaxed">
+                        有幫忙代墊錢錢的，要記得在分帳群記帳ㄛ~<br>
+                        旅途結束後 <strong>3/2 (一)</strong> 會做最終結算，結算後依照自動結算結果還錢錢。
+                    </p>
+                    <a href="https://liff.line.me/1655320992-Y8GowEpw/g/wfvMCVA7rPBPDEHKQGN91q" target="_blank" class="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-xl transition shadow-md">
+                        開啟 LINE 分帳群組 ➤
+                    </a>
+                </div>
+                <div class="absolute right-[-20px] bottom-[-20px] text-9xl opacity-10 text-emerald-900 pointer-events-none">
+                    $
+                </div>
             </div>
 
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-100 mb-8">
                 <h2 class="text-lg font-bold text-stone-700 mb-4 border-l-4 border-orange-800 pl-3">行程亮點分析</h2>
                 <p class="text-sm text-stone-600 mb-6 leading-relaxed">
-                    本區塊旨在讓大家對這兩天的「活動強度」與「預算分配」有初步概念。我們將重點放在第一天的古城區文化探索與第二天的十鼓動態體驗，行程安排預留了大量緩衝時間，符合慢活風格。
+                    這次行程第一天我們在中西區吃吃喝喝古城風光，第二天去十鼓玩玩。<br>
+					這裡讓大家對這兩天的「活動強度」與「預算分配」有初步概念。
                 </p>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <!-- Chart 1: Budget Est -->
                     <div class="flex flex-col items-center">
                         <h3 class="text-sm font-semibold text-stone-500 mb-2">預估預算結構 (每人)</h3>
                         <div class="chart-container">
                             <canvas id="budgetChart"></canvas>
                         </div>
-                        <p class="text-xs text-stone-400 mt-2">*不含個人伴手禮與額外酒水</p>
+                        <div class="mt-4 text-center w-full">
+                            <p class="text-xs text-stone-400 mb-2">*含住宿、門票、交通、餐飲</p>
+                            <div class="inline-block bg-orange-50 border border-orange-100 rounded-xl px-6 py-2">
+                                <span class="text-xs text-orange-600 block mb-1">預估總金額</span>
+                                <span class="text-xl font-bold text-orange-900">NT$ 3,129</span>
+                            </div>
+                        </div>
                     </div>
-                    <!-- Chart 2: Pace Analysis -->
                     <div class="flex flex-col items-center">
                         <h3 class="text-sm font-semibold text-stone-500 mb-2">慢活 vs 活動強度</h3>
                         <div class="chart-container">
@@ -98,29 +104,14 @@
                     </div>
                 </div>
             </div>
-
-            <div class="grid grid-cols-2 gap-4">
-                <div class="bg-orange-50 p-4 rounded-xl border border-orange-100 text-center">
-                    <div class="text-2xl mb-1">🌤️</div>
-                    <div class="text-sm font-bold text-stone-700">天氣預報</div>
-                    <div class="text-xs text-stone-500">早晚溫差大 (18-25°C)</div>
-                </div>
-                <div class="bg-stone-100 p-4 rounded-xl border border-stone-200 text-center">
-                    <div class="text-2xl mb-1">🛵</div>
-                    <div class="text-sm font-bold text-stone-700">交通方式</div>
-                    <div class="text-xs text-stone-500">D1 機車 / D2 計程車</div>
-                </div>
-            </div>
         </section>
 
-        <!-- SECTION: ITINERARY -->
         <section id="itinerary" class="view-section hidden">
             <div class="mb-6">
                 <h2 class="text-2xl font-bold text-stone-800 mb-2">每日行程規劃</h2>
-                <p class="text-sm text-stone-500">點擊卡片可查看地圖導航與詳細資訊。</p>
+                <p class="text-sm text-stone-500">點擊卡片可查看地圖導航或跳轉至相關資訊。</p>
             </div>
 
-            <!-- Tabs -->
             <div class="flex border-b border-stone-200 mb-6 sticky top-16 bg-[#FAFAF9] z-40 pt-2">
                 <button onclick="setDay(1)" id="tab-day1" class="w-1/2 pb-3 text-center transition-all active-tab">
                     Day 1 <span class="text-xs block font-normal text-stone-500">02/27 古城探索</span>
@@ -130,26 +121,24 @@
                 </button>
             </div>
 
-            <!-- Timeline Container -->
             <div id="timeline-container" class="relative pl-2 pb-12">
-                <!-- Line -->
                 <div class="timeline-line"></div>
                 <!-- Content injected via JS -->
             </div>
         </section>
 
-        <!-- SECTION: FOOD MAP -->
         <section id="food" class="view-section hidden">
             <div class="mb-6">
                 <h2 class="text-2xl font-bold text-stone-800 mb-2">府城美食地圖</h2>
-                <p class="text-sm text-stone-600 mb-4">精選住宿周邊與神農街必吃美食。請根據當下飢餓程度與排隊狀況選擇。</p>
+                <p class="text-sm text-stone-600 mb-4">點擊分類按鈕可篩選類型。</p>
                 
-                <!-- Filters -->
-                <div class="flex flex-wrap gap-2">
-                    <button onclick="filterFood('all')" class="food-filter px-4 py-2 rounded-full text-sm bg-stone-800 text-white shadow-sm transition">全部</button>
-                    <button onclick="filterFood('lunch')" class="food-filter px-4 py-2 rounded-full text-sm bg-white text-stone-600 border border-stone-200 hover:bg-stone-100 transition">午餐/主食</button>
-                    <button onclick="filterFood('cafe')" class="food-filter px-4 py-2 rounded-full text-sm bg-white text-stone-600 border border-stone-200 hover:bg-stone-100 transition">老屋咖啡</button>
-                    <button onclick="filterFood('dinner')" class="food-filter px-4 py-2 rounded-full text-sm bg-white text-stone-600 border border-stone-200 hover:bg-stone-100 transition">晚餐/宵夜</button>
+                <div class="flex flex-wrap gap-2 overflow-x-auto pb-2 hide-scrollbar">
+                    <button onclick="filterFood('all')" class="food-filter flex-shrink-0 px-4 py-2 rounded-full text-sm bg-stone-800 text-white shadow-sm transition">全部</button>
+                    <button onclick="filterFood('breakfast')" class="food-filter flex-shrink-0 px-4 py-2 rounded-full text-sm bg-white text-stone-600 border border-stone-200 hover:bg-stone-100 transition">早餐</button>
+                    <button onclick="filterFood('lunch')" class="food-filter flex-shrink-0 px-4 py-2 rounded-full text-sm bg-white text-stone-600 border border-stone-200 hover:bg-stone-100 transition">午餐</button>
+                    <button onclick="filterFood('snack')" class="food-filter flex-shrink-0 px-4 py-2 rounded-full text-sm bg-white text-stone-600 border border-stone-200 hover:bg-stone-100 transition">點心&飲料</button>
+                    <button onclick="filterFood('dinner')" class="food-filter flex-shrink-0 px-4 py-2 rounded-full text-sm bg-white text-stone-600 border border-stone-200 hover:bg-stone-100 transition">晚餐</button>
+                    <button onclick="filterFood('latenight')" class="food-filter flex-shrink-0 px-4 py-2 rounded-full text-sm bg-white text-stone-600 border border-stone-200 hover:bg-stone-100 transition">宵夜</button>
                 </div>
             </div>
 
@@ -158,7 +147,17 @@
             </div>
         </section>
 
-        <!-- SECTION: TEN DRUM -->
+        <section id="sightseeing" class="view-section hidden">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-stone-800 mb-2">景點地圖</h2>
+                <p class="text-sm text-stone-600 mb-4">本次行程重點打卡與參觀景點。</p>
+            </div>
+
+            <div id="sightseeing-grid" class="grid grid-cols-1 gap-4">
+                <!-- Sightseeing cards injected via JS -->
+            </div>
+        </section>
+
         <section id="tendrum" class="view-section hidden">
             <div class="bg-white rounded-2xl shadow-sm border border-stone-100 overflow-hidden">
                 <div class="bg-stone-800 text-white p-6">
@@ -167,7 +166,6 @@
                 </div>
                 
                 <div class="p-6 space-y-8">
-                    <!-- Intro -->
                     <div>
                         <p class="text-stone-600 leading-relaxed mb-4">
                             十鼓文創園區佔地廣大，建議我們採取「先動後靜」的策略。退房後直接搭計程車前往，預計由中午玩到下午三點半。
@@ -177,7 +175,6 @@
                         </a>
                     </div>
 
-                    <!-- Strategy -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="border border-stone-200 rounded-xl p-4">
                             <h3 class="font-bold text-stone-800 mb-3 flex items-center">
@@ -204,36 +201,25 @@
                         </div>
                     </div>
 
-                    <!-- Photo Spots -->
-                    <div>
-                        <h3 class="font-bold text-stone-800 mb-3">📸 拍照打卡點</h3>
-                        <div class="space-y-3">
-                            <div class="flex items-start">
-                                <span class="text-xl mr-3">🧙</span>
-                                <div>
-                                    <h4 class="font-medium text-stone-800">魔法工廠</h4>
-                                    <p class="text-xs text-stone-500">宛如哈利波特場景的書牆與飛天書。</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start">
-                                <span class="text-xl mr-3">🌌</span>
-                                <div>
-                                    <h4 class="font-medium text-stone-800">天空步道</h4>
-                                    <p class="text-xs text-stone-500">穿梭在老糖廠樹冠層之間的透明步道。</p>
-                                </div>
-                            </div>
+                    <div class="pt-6 border-t border-stone-100">
+                        <h3 class="font-bold text-stone-800 mb-3 flex items-center">
+                            <span class="mr-2">🗺️</span> 園區導覽地圖
+                        </h3>
+                        <div class="rounded-xl overflow-hidden shadow-md border border-stone-200 bg-stone-50">
+                            <img src="https://tendrum.com.tw/userfiles/images/map202509_%E5%85%A7%E9%A0%81.jpg" 
+                                 alt="十鼓文創園區導覽地圖" 
+                                 class="w-full h-auto object-contain"
+                                 loading="lazy">
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION: LOGISTICS -->
         <section id="logistics" class="view-section hidden">
             <h2 class="text-2xl font-bold text-stone-800 mb-6">交通與住宿資訊</h2>
             
             <div class="space-y-6">
-                <!-- Hotel -->
                 <div class="bg-white p-5 rounded-xl shadow-sm border border-stone-100">
                     <div class="flex justify-between items-start mb-4">
                         <div>
@@ -251,7 +237,6 @@
                     </ul>
                 </div>
 
-                <!-- Scooter -->
                 <div class="bg-white p-5 rounded-xl shadow-sm border border-stone-100">
                     <div class="flex justify-between items-start mb-4">
                         <div>
@@ -267,7 +252,6 @@
                     </div>
                 </div>
 
-                <!-- Taxi -->
                 <div class="bg-white p-5 rounded-xl shadow-sm border border-stone-100">
                     <div class="flex justify-between items-start mb-4">
                         <div>
@@ -296,8 +280,8 @@
     </main>
 
     <footer class="mt-12 py-8 bg-stone-100 text-center text-stone-400 text-sm">
-        <p>2026 Tainan Travel Planner Widget</p>
-        <p class="text-xs mt-2">Safe Travels & Slow Living</p>
+        <p>228 Tainan Travel Planner</p>
+        <p class="text-xs mt-2">Have a nice trip!</p>
     </footer>
 
     <script>
@@ -305,15 +289,15 @@
         const itineraryData = {
             day1: [
                 { time: '11:00', title: '台南火車站集合', icon: '🚩', desc: '前站出口集合。租借機車或確認共享機車狀況。', loc: '台南火車站', duration: '30m' },
-                { time: '11:30', title: '午餐時光', icon: '🍜', desc: '前往 Ciao 附近的推薦美食。建議：阿星鹹粥(傳統) 或 喫麵時間。', loc: '中西區', duration: '1.5h' },
+                { time: '11:30', title: '午餐時光', icon: '🍜', desc: '前往 Ciao 附近的推薦美食。點擊查看「美食地圖」午餐推薦。', loc: '中西區', duration: '1.5h', action: "switchView('food'); filterFood('lunch');" },
                 { time: '13:00', title: 'Ciao 潮文旅 寄放行李', icon: '🧳', desc: '先卸下重裝備，準備輕裝探索。', loc: 'Ciao 潮文旅', duration: '30m' },
-                { time: '13:30', title: '古城漫遊 (中西區)', icon: '🏛️', desc: '台南市美術館 2 館 (必拍白牆光影)、司法博物館 (貓道參觀)、孔廟商圈漫步。', loc: '台南市美術館2館', duration: '2.5h' },
-                { time: '16:00', title: '老屋下午茶', icon: '☕', desc: '享受台南特有的老宅氛圍。推薦：窄門咖啡 或 順風號。', loc: '孔廟商圈', duration: '1.5h' },
+                { time: '13:30', title: '古城漫遊 (中西區)', icon: '🏛️', desc: '點擊查看「景點地圖」。美術館 2 館、司法博物館、孔廟商圈漫步。', loc: '台南市美術館2館', duration: '2.5h', action: "switchView('sightseeing');" },
+                { time: '16:00', title: '老屋下午茶', icon: '☕', desc: '享受台南特有的老宅氛圍。點擊查看「美食地圖」點心&飲料推薦。', loc: '孔廟商圈', duration: '1.5h', action: "switchView('food'); filterFood('snack');" },
                 { time: '18:00', title: '神農街 晚餐 & 散策', icon: '🏮', desc: '文青聖地。推薦拍照點：藥王廟前燈籠。晚餐可吃街邊小食或特色餐酒館。', loc: '神農街', duration: '2h' },
                 { time: '20:00', title: '採買 & 桌遊之夜', icon: '🎲', desc: '買好鹽酥雞、滷味、啤酒，回到飯店大廳或房間開啟桌遊大戰。', loc: 'Ciao 潮文旅', duration: '∞' }
             ],
             day2: [
-                { time: '09:00', title: '飯店周邊早餐', icon: '🍳', desc: '步行覓食。推薦：阿和肉燥飯 或 飯店附近早午餐。', loc: '中西區', duration: '1h' },
+                { time: '09:00', title: '飯店周邊早餐', icon: '🍳', desc: '步行覓食。點擊查看「美食地圖」早餐推薦。', loc: '中西區', duration: '1h', action: "switchView('food'); filterFood('breakfast');" },
                 { time: '10:00', title: '退房 & 出發', icon: '🚕', desc: '辦理退房，叫車 (Uber/Taxi) 直奔十鼓。', loc: 'Ciao 潮文旅', duration: '30m' },
                 { time: '10:40', title: '抵達 十鼓文創園區', icon: '🥁', desc: '購票入園，寄放行李 (遊客中心)。', loc: '十鼓仁糖文創園區', duration: '4h' },
                 { time: '12:30', title: '園區午餐', icon: '🍔', desc: '於園區內修護書屋或蜜橋咖啡館用餐。', loc: '十鼓文創園區', duration: '1h' },
@@ -322,14 +306,53 @@
         };
 
         const foodData = [
-            { name: '阿和肉燥飯', type: 'lunch', tag: '傳統小吃', dist: '步行可達', link: '阿和肉燥飯' },
-            { name: '福生小食店', type: 'lunch', tag: '經典台菜', dist: '車程 3分', link: '福生小食店' },
-            { name: '窄門咖啡', type: 'cafe', tag: '老屋/窄巷', dist: '孔廟旁', link: '窄門咖啡' },
-            { name: '南美春室 The POOL', type: 'cafe', tag: '美術館頂樓', dist: '美術館2館', link: '南美春室' },
-            { name: 'Bar Home', type: 'dinner', tag: '老宅酒吧', dist: '需預約', link: 'Bar Home' },
-            { name: '神農街小吃群', type: 'dinner', tag: '各式小食', dist: '神農街', link: '神農街' },
-            { name: '友愛街鹽酥雞', type: 'dinner', tag: '宵夜首選', dist: '友愛街', link: '友愛街鹽酥雞' },
-            { name: '阿明豬心冬粉', type: 'lunch', tag: '排隊名店', dist: '保安路', link: '阿明豬心冬粉' }
+            // 午餐
+            { name: '下大道蘭米糕', type: 'lunch', time: '09:00~14:00', desc: '樸實的小吃攤，供應米糕、湯品和其他家常美食。', link: '下大道蘭米糕' },
+            { name: '鼎富發豬油拌飯', type: 'lunch', time: '10:30~19:30', desc: '採鄉村工業風裝潢的街角餐廳，供應米飯料理、湯品。住宿步行7min。', link: '鼎富發豬油拌飯' },
+            { name: '四百萬意麵', type: 'lunch', time: '11:00~22:00', desc: '簡單、平價又好吃的台南意麵。', link: '四百萬意麵' },
+            { name: '海安牛肉食堂', type: 'lunch', time: '09:00~20:30', desc: '口味偏清淡清爽，選擇多主打各式牛肉料理。住宿步行5min。', link: '海安牛肉食堂' },
+            { name: '矮仔成蝦仁飯', type: 'lunch', time: '08:30~19:30', desc: '平實的餐館，主打傳統飯食、麵食和湯品。住宿步行6min。', link: '矮仔成蝦仁飯' },
+            { name: '集品蝦仁飯', type: 'lunch', time: '09:30~20:00', desc: '簡約的店鋪，在地料理。住宿步行6min。', link: '集品蝦仁飯' },
+            { name: '阿鳳浮水虱目魚羹', type: 'lunch', time: '07:00~23:00', desc: '設有路邊座位並採臨櫃點餐的簡約小吃攤，供應常見的魚湯、米飯料理和餃子。', link: '阿鳳浮水虱目魚羹' },
+            { name: '醇涎坊古早味鍋燒意麵', type: 'lunch', time: '06:00~20:00', desc: '簡單小巧的熱鬧餐館，專門供應各式各樣的麵食。住宿步行9min。', link: '醇涎坊古早味鍋燒意麵' },
+            
+            // 點心&飲料
+            { name: '杏源珈琲', type: 'snack', time: '08:00~18:00', desc: '由老醫館/藥行改建，走進店裡彷彿時間倒轉。有老鐘滴答聲與咖啡香。', link: '杏源珈琲' },
+            { name: '萃行咖啡館', type: 'snack', time: '13:00~21:00', desc: '網友大推開心果提拉米蘇。', link: '萃行咖啡館' },
+            { name: '南美春室 The POOL', type: 'snack', time: '10:00~18:00', desc: '位在美術館頂樓，環境幽靜、採光柔和，能眺望臺南市區景色。', link: '南美春室' },
+            { name: '窄門咖啡館', type: 'snack', time: '11:30~19:00', desc: '帶著古老文藝的氣息，店內陳設許多古老的裝飾品。', link: '窄門咖啡館' },
+            { name: 'Paris古咪春小日常咖啡', type: 'snack', time: '13:00~22:00', desc: '神農街百年老屋結合法式老物古董店，主打輕食、手作甜點及咖啡。', link: '古咪春' },
+            { name: '肥貓咖啡', type: 'snack', time: '13:30~18:30', desc: '神農街巷子內，老宅改造，搭配木質家具跟工業風，有店貓。', link: '肥貓咖啡' },
+            { name: '花食間手作料理', type: 'snack', time: '11:00~20:00', desc: '有店貓。主打泡芙甜點之外，還有蘋果派冰沙等點心。', link: '花食間' },
+            { name: '一品肉圓', type: 'snack', time: '08:30~19:00', desc: '在地小吃。', link: '一品肉圓' },
+            { name: '神農街阿伯紅茶', type: 'snack', time: '18:00/19:00 出攤', desc: '隨機路邊擺攤的15元紅茶，跟阿伯買紅茶他會脫帽行禮 (賣完為止)。', link: '神農街阿伯紅茶' },
+            { name: '金桃家草莓大福2号店', type: 'snack', time: '15:00~17:00', desc: '超好吃草莓大福，排隊名店，有緣再購入。', link: '金桃家草莓大福2号店' },
+
+            // 晚餐
+            { name: '有麥點手作料理', type: 'dinner', time: '10:30~21:00', desc: '以台灣在地小農蕎麥為食材，結合日式與創意料理。', link: '有麥點手作料理' },
+            { name: '阿明豬心冬粉', type: 'dinner', time: '17:00~00:00', desc: '充滿活力的簡樸店面，供應傳統湯品和薄片豬心料理。', link: '阿明豬心冬粉' },
+            { name: '咖哩道場:嫩煎鴨胸', type: 'dinner', time: '17:00~22:00', desc: '排隊小攤販 (人少再買)，鴨胸職人的400元鴨胸，老闆很健談。', link: '咖哩道場' },
+
+            // 宵夜
+            { name: '青青鹹酥雞', type: 'latenight', time: '17:00~00:30', desc: '酥脆口感不油膩，愈吃愈涮嘴，價錢佛心食材新鮮。', link: '青青鹹酥雞' },
+            { name: '激烤!串串燒!', type: 'latenight', time: '18:00~02:00', desc: '金華路小店氛圍超放鬆，烤串好吃食材新鮮。', link: '激烤串串燒' },
+            { name: '龍九坊', type: 'latenight', time: '17:00~03:00', desc: '港式酒吧/特調，有蒸籠點心、炸物、藥膳湯。記得門口電話撥9再開門。', link: '龍九坊' },
+
+            // 早餐
+            { name: '香腸拔の水煎包', type: 'breakfast', time: '05:30~14:00', desc: '真的很便宜，剛出爐的水煎包很好吃，煎餃底部很脆。', link: '香腸拔的水煎包' },
+            { name: '大勇街無名鹹粥', type: 'breakfast', time: '04:00~13:30', desc: '環境平實的簡約餐廳，供應各式各樣的粥品。', link: '大勇街無名鹹粥' },
+            { name: '巧沛東方美早餐店', type: 'breakfast', time: '05:00~12:30', desc: '價格便宜料多實在，小時候記憶裡的傳統早餐。', link: '巧沛東方美' }
+        ];
+
+        const sightseeingData = [
+            { name: '藍晒圖文創園區', desc: '老屋彩繪與文創小店的聚落，適合拍照。', link: '藍晒圖文創園區' },
+            { name: '臺南國家美術館籌備處', desc: '原臺南市美術館2館，絕美白牆建築。', link: '台南市美術館2館' },
+            { name: '林百貨', desc: '台灣現存最古老的百貨公司，頂樓有神社。', link: '林百貨' },
+            { name: '延平郡王祠', desc: '歷史悠久的鄭成功廟，環境清幽。', link: '延平郡王祠' },
+            { name: '司法博物館', desc: '原台南地方法院，必看貓道與巴洛克建築。', link: '司法博物館' },
+            { name: '西市場 (西門淺草)', desc: '百年市場新生，充滿復古氛圍。', link: '西市場' },
+            { name: '神農街', desc: '保存完整的清代街道，晚上燈籠亮起超美。', link: '神農街' },
+            { name: '十鼓文創園區', desc: '糖廠改建的極限遊樂場與國際級鼓樂。', link: '十鼓文創園區' }
         ];
 
         // State
@@ -340,24 +363,18 @@
             renderCharts();
             renderItinerary(1);
             renderFood('all');
+            renderSightseeing();
             
-            // Animation for intro
             document.getElementById('overview').classList.add('animate-fade-in');
         });
 
         // Navigation Logic
         function switchView(viewId) {
-            // Hide all views
             document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
-            // Show selected view
             const selected = document.getElementById(viewId);
             selected.classList.remove('hidden');
             selected.classList.add('animate-fade-in');
-            
-            // Scroll to top
             window.scrollTo(0, 0);
-
-            // Close mobile menu if open
             document.getElementById('mobile-menu').classList.add('hidden');
         }
 
@@ -377,8 +394,6 @@
         function renderItinerary(day) {
             const container = document.getElementById('timeline-container');
             const data = day === 1 ? itineraryData.day1 : itineraryData.day2;
-            
-            // Keep the line
             container.innerHTML = '<div class="timeline-line"></div>';
 
             data.forEach((item, index) => {
@@ -386,11 +401,22 @@
                 node.className = 'relative flex items-start mb-8 pl-10 animate-slide-up';
                 node.style.animationDelay = `${index * 0.1}s`;
                 
+                // Determine click action
+                let clickAction = "";
+                let clickHint = "";
+                if (item.action) {
+                    clickAction = item.action;
+                    clickHint = '👉 點擊查看詳情';
+                } else {
+                    clickAction = `window.open('https://www.google.com/maps/search/?api=1&query=${item.loc}', '_blank')`;
+                    clickHint = '📍 點擊導航';
+                }
+
                 node.innerHTML = `
                     <div class="absolute left-2 w-6 h-6 bg-orange-100 border-2 border-orange-500 rounded-full flex items-center justify-center text-xs z-10">
                         ${index + 1}
                     </div>
-                    <div class="bg-white p-4 rounded-xl shadow-sm border border-stone-100 w-full hover:shadow-md transition cursor-pointer" onclick="window.open('https://www.google.com/maps/search/?api=1&query=${item.loc}', '_blank')">
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-stone-100 w-full hover:shadow-md transition cursor-pointer" onclick="${clickAction}">
                         <div class="flex justify-between items-start mb-1">
                             <span class="text-orange-800 font-bold font-mono text-sm bg-orange-50 px-2 py-0.5 rounded">${item.time}</span>
                             <span class="text-xs text-stone-400 flex items-center">⏳ ${item.duration}</span>
@@ -399,7 +425,7 @@
                         <p class="text-sm text-stone-500 leading-relaxed">${item.desc}</p>
                         <div class="mt-3 pt-2 border-t border-stone-50 flex justify-end">
                             <span class="text-xs text-orange-600 font-medium flex items-center">
-                                📍 ${item.loc} <span class="ml-1 text-stone-300">›</span>
+                                ${clickHint}
                             </span>
                         </div>
                     </div>
@@ -410,12 +436,15 @@
 
         // Food Logic
         function filterFood(type) {
-            // Update buttons
             document.querySelectorAll('.food-filter').forEach(btn => {
-                if ((type === 'all' && btn.innerText === '全部') || 
-                    (type === 'lunch' && btn.innerText.includes('午餐')) ||
-                    (type === 'cafe' && btn.innerText.includes('咖啡')) ||
-                    (type === 'dinner' && btn.innerText.includes('晚餐'))) {
+                const btnTypeMatch = (type === 'all' && btn.innerText === '全部') || 
+                                     (type === 'lunch' && btn.innerText.includes('午餐')) ||
+                                     (type === 'snack' && btn.innerText.includes('點心')) ||
+                                     (type === 'dinner' && btn.innerText.includes('晚餐')) ||
+                                     (type === 'latenight' && btn.innerText.includes('宵夜')) ||
+                                     (type === 'breakfast' && btn.innerText.includes('早餐'));
+
+                if (btnTypeMatch) {
                     btn.classList.remove('bg-white', 'text-stone-600');
                     btn.classList.add('bg-stone-800', 'text-white');
                 } else {
@@ -429,31 +458,62 @@
         function renderFood(filter) {
             const container = document.getElementById('food-grid');
             container.innerHTML = '';
-            
             const filtered = filter === 'all' ? foodData : foodData.filter(f => f.type === filter);
             
             filtered.forEach(item => {
                 const card = document.createElement('div');
-                card.className = 'bg-white p-4 rounded-xl shadow-sm border border-stone-100 flex justify-between items-center hover:bg-stone-50 transition';
+                card.className = 'bg-white p-4 rounded-xl shadow-sm border border-stone-100 hover:bg-stone-50 transition';
                 
                 let icon = '🍴';
-                if(item.type === 'cafe') icon = '☕';
-                if(item.type === 'dinner') icon = '🌙';
+                let tagColor = 'bg-stone-100 text-stone-600';
+                
+                if(item.type === 'snack') { icon = '☕'; tagColor = 'bg-amber-50 text-amber-700'; }
+                if(item.type === 'dinner') { icon = '🌙'; tagColor = 'bg-indigo-50 text-indigo-700'; }
+                if(item.type === 'latenight') { icon = '🍺'; tagColor = 'bg-purple-50 text-purple-700'; }
+                if(item.type === 'breakfast') { icon = '🍳'; tagColor = 'bg-yellow-50 text-yellow-700'; }
 
                 card.innerHTML = `
-                    <div>
-                        <div class="flex items-center space-x-2 mb-1">
-                            <span class="text-xl">${icon}</span>
-                            <h3 class="font-bold text-stone-800">${item.name}</h3>
+                    <div class="flex justify-between items-start h-full">
+                        <div class="flex flex-col justify-between flex-grow pr-2">
+                            <div>
+                                <div class="flex items-center space-x-2 mb-1">
+                                    <span class="text-xl">${icon}</span>
+                                    <h3 class="font-bold text-stone-800 leading-tight">${item.name}</h3>
+                                </div>
+                                <div class="flex items-center space-x-2 mb-2">
+                                    <span class="text-xs ${tagColor} px-2 py-0.5 rounded">${item.time}</span>
+                                </div>
+                                <p class="text-sm text-stone-500 leading-relaxed line-clamp-3 mb-2">${item.desc}</p>
+                            </div>
                         </div>
-                        <div class="flex items-center space-x-2">
-                            <span class="text-xs bg-stone-100 text-stone-600 px-2 py-0.5 rounded">${item.tag}</span>
-                            <span class="text-xs text-stone-400">${item.dist}</span>
-                        </div>
+                        <a href="https://www.google.com/maps/search/?api=1&query=${item.link}台南" target="_blank" class="flex-shrink-0 w-10 h-10 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center hover:bg-orange-200 transition mt-1">
+                            ➤
+                        </a>
                     </div>
-                    <a href="https://www.google.com/maps/search/?api=1&query=${item.link}台南" target="_blank" class="w-10 h-10 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center hover:bg-orange-200 transition">
-                        ➤
-                    </a>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Sightseeing Logic
+        function renderSightseeing() {
+            const container = document.getElementById('sightseeing-grid');
+            container.innerHTML = '';
+            
+            sightseeingData.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'bg-white p-4 rounded-xl shadow-sm border border-stone-100 hover:shadow-md transition';
+                
+                card.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-bold text-lg text-stone-800 mb-1">📸 ${item.name}</h3>
+                            <p class="text-sm text-stone-600">${item.desc}</p>
+                        </div>
+                        <a href="https://www.google.com/maps/search/?api=1&query=${item.link}台南" target="_blank" class="flex-shrink-0 ml-4 bg-teal-50 text-teal-700 px-3 py-1 rounded-full text-xs font-bold hover:bg-teal-100">
+                            導航
+                        </a>
+                    </div>
                 `;
                 container.appendChild(card);
             });
@@ -461,14 +521,13 @@
 
         // Charts
         function renderCharts() {
-            // Budget Chart
             const ctxBudget = document.getElementById('budgetChart').getContext('2d');
             new Chart(ctxBudget, {
                 type: 'doughnut',
                 data: {
-                    labels: ['住宿 (Ciao)', '交通預估 (機車/Taxi)', '十鼓門票', '餐飲預估'],
+                    labels: ['住宿 (Ciao)', '交通 (機車/Taxi)', '十鼓門票', '餐飲預估'],
                     datasets: [{
-                        data: [1041, 400, 488, 1200], // Rough estimates
+                        data: [1041, 400, 488, 1200],
                         backgroundColor: ['#E7E5E4', '#FDBA74', '#9A3412', '#57534E'],
                         borderWidth: 0
                     }]
@@ -482,7 +541,6 @@
                 }
             });
 
-            // Pace Chart
             const ctxPace = document.getElementById('paceChart').getContext('2d');
             new Chart(ctxPace, {
                 type: 'bar',
@@ -490,7 +548,7 @@
                     labels: ['D1: 上午', 'D1: 下午', 'D1: 晚上', 'D2: 上午', 'D2: 下午'],
                     datasets: [{
                         label: '活動強度 (1-10)',
-                        data: [4, 7, 3, 5, 8], // Walking intensity
+                        data: [4, 7, 3, 5, 8],
                         backgroundColor: '#D6D3D1',
                         hoverBackgroundColor: '#9A3412',
                         borderRadius: 4
@@ -507,11 +565,10 @@
     </script>
     
     <style>
-        /* Simple animations */
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-fade-in { animation: fadeIn 0.4s ease-out; }
-        .animate-slide-up { animation: slideUp 0.4s ease-out forwards; opacity: 0; }
+       .animate-fade-in { animation: fadeIn 0.4s ease-out; }
+       .animate-slide-up { animation: slideUp 0.4s ease-out forwards; opacity: 0; }
     </style>
 </body>
 </html>
